@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+      :root {
+        --primary-orange: #ff7a18;
+        --primary-purple: #5f2c82;
+        --background: #f7f7f7;
+        --input-bg: #fff;
+        --text-color: #333;
+        --card-shadow: 0 2px 16px rgba(95,44,130,0.10);
+        --border-radius: 16px;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: var(--background);
+        min-height: 100vh;
+      }
+      #app {
+        width: 100%;
+      }
+      .container {
+        background: var(--input-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--card-shadow);
+        padding: 2.5rem 2rem 2rem;
+        max-width: 370px;
+        width: 100%;
+        margin: 2rem auto;
+        text-align: center;
+      }
+      .gradient-title {
+        background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-purple) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.6rem;
+        letter-spacing: 1.5px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        align-items: stretch;
+      }
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 0.7rem;
+        align-items: stretch;
+      }
+      .input-group label {
+        font-size: 1rem;
+        color: var(--primary-purple);
+        font-weight: 500;
+        text-align: left;
+        margin-bottom: 0.3rem;
+        width: 100%;
+      }
+      .input-group input[type="text"],
+      .input-group input[type="password"] {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.7rem 0.9rem;
+        font-size: 1rem;
+        border: 1.5px solid var(--primary-purple);
+        border-radius: 8px;
+        outline: none;
+        background: var(--input-bg);
+        color: var(--text-color);
+        transition: border-color 0.2s;
+        text-align: left;
+        margin: 0;
+        display: block;
+      }
+      .input-group input[type="text"]:focus,
+      .input-group input[type="password"]:focus {
+        border: 1.5px solid var(--primary-orange);
+      }
+      .login-btn {
+        margin-top: 0.5rem;
+        width: 100%;
+        padding: 0.85rem 0;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-purple) 100%);
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(255,122,24,0.07);
+        transition: background 0.2s;
+        display: block;
+      }
+      .login-btn:hover {
+        opacity: 0.94;
+        background: linear-gradient(90deg, var(--primary-purple) 0%, var(--primary-orange) 100%);
+      }
+      #response {
+        margin-top:1rem;
+        min-height:20px;
+        color:#d23535;
+        font-weight:500;
+        text-align: center;
+      }
+      @media (max-width: 450px) {
+        .container {
+          padding: 1.2rem 0.7rem 1.2rem;
+        }
+        .gradient-title {
+          font-size: 1.4rem;
+        }
+        .input-group input[type="text"],
+        .input-group input[type="password"],
+        .login-btn {
+          width: 100%;
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="container">
+        <div class="gradient-title">Login</div>
+        <form id="loginForm" autocomplete="off" onsubmit="handleLogin(event)">
+          <div class="input-group">
+            <label for="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              autocomplete="off"
+              placeholder="e.g. David Kamau">
+          </div>
+          <div class="input-group">
+            <label for="regno">Reg No</label>
+            <input
+              type="text"
+              id="regno"
+              name="regno"
+              required
+              autocomplete="off"
+              placeholder="e.g. E103/1234G/21">
+          </div>
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              autocomplete="off"
+              placeholder="•••••••••">
+          </div>
+          <button class="login-btn" type="submit">Log In</button>
+        </form>
+        <div id="response"></div>
+      </div>
+    </div>
+    <script>
+      function handleLogin(e) {
+        e.preventDefault();
+        var form = document.getElementById('loginForm');
+        var name = form.name.value.trim();
+        var regno = form.regno.value.trim();
+        var password = form.password.value;
+
+        document.getElementById('response').textContent = "Processing...";
+        google.script.run
+          .withSuccessHandler(function(response) {
+            document.getElementById('response').style.color = response.success ? "#079f50" : "#d23535";
+            document.getElementById('response').textContent = response.message;
+
+            if (response.success) {
+              setTimeout(function() {
+                google.script.run
+                  .withSuccessHandler(function(html) {
+                    document.getElementById('app').innerHTML = html;
+                    registerCategoriesGoto();
+                    runFragmentScripts();
+                    pushHistoryIfNew('categories');
+                  })
+                  .getCategoriesPage();
+              }, 600);
+            }
+          })
+          .withFailureHandler(function() {
+            document.getElementById('response').style.color = "#d23535";
+            document.getElementById('response').textContent = "Script error. Please try again.";
+          })
+          .processLogin(name, regno, password);
+      }
+
+      function pushHistoryIfNew(pageName) {
+        // Only push a new history state if the page has changed!
+        if (!history.state || history.state.page !== pageName) {
+          history.pushState({page: pageName}, '', '');
+        }
+      }
+
+      function registerCategoriesGoto() {
+        window.goto = function(category) {
+          const pageMap = {
+            'categories': 'getCategoriesPage',
+            'expenditure': 'getExpenditurePage',
+            'income': 'getIncomePage',
+            'income-evaluation': 'getIncomeEvalPage',
+            'expenditure-evaluation': 'getExpenditureEvalPage',
+            'control-budget': 'getControlBudgetPage',
+            'analysis': 'getAnalysisPage'
+          };
+          if (pageMap[category]) {
+            google.script.run.withSuccessHandler(function(html) {
+              document.getElementById('app').innerHTML = html;
+              if (category === 'categories' && window.registerCategoriesGoto) window.registerCategoriesGoto();
+              runFragmentScripts();
+              pushHistoryIfNew(category);
+            })[pageMap[category]]();
+          } else {
+            alert("Navigate to: " + category);
+          }
+        };
+      }
+
+      function runFragmentScripts() {
+        const app = document.getElementById('app');
+        if (!app) return;
+        app.querySelectorAll('script').forEach(script => {
+          const s = document.createElement('script');
+          if (script.src) {
+            s.src = script.src;
+          } else {
+            s.textContent = script.textContent;
+          }
+          document.body.appendChild(s);
+          document.body.removeChild(s);
+        });
+      }
+      registerCategoriesGoto();
+
+      window.onpopstate = function(event) {
+        if (event.state && event.state.page) {
+          const pageMap = {
+            'categories': 'getCategoriesPage',
+            'expenditure': 'getExpenditurePage',
+            'income': 'getIncomePage',
+            'income-evaluation': 'getIncomeEvalPage',
+            'expenditure-evaluation': 'getExpenditureEvalPage',
+            'control-budget': 'getControlBudgetPage',
+            'analysis': 'getAnalysisPage'
+          };
+          if (pageMap[event.state.page]) {
+            google.script.run.withSuccessHandler(function(html) {
+              document.getElementById('app').innerHTML = html;
+              if (event.state.page === 'categories' && window.registerCategoriesGoto) window.registerCategoriesGoto();
+              runFragmentScripts && runFragmentScripts();
+            })[pageMap[event.state.page]]();
+          } else {
+            google.script.run.withSuccessHandler(function(html) {
+              document.getElementById('app').innerHTML = html;
+            }).getLoginPage();
+          }
+        }
+      };
+
+      window.onload = function() {
+        history.replaceState({page: 'login'}, '', '');
+      };
+    </script>
+  </body>
+</html>

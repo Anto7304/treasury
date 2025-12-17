@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Expenditure Form - Date Box Card</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+
+/* Quick Navigation Bar */
+.quick-nav-bar {
+  background: #fff;
+  box-shadow: 0 1px 12px rgba(95,44,130,0.06), 0 0.5px 0 #ececed;
+  border-radius: 0 0 18px 18px;
+  padding: 0.5rem 0.7rem 0.45rem 0.7rem;
+  margin-bottom: 1.12rem;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  width: 100vw;
+  min-width: 300px;
+  overflow-x: auto;
+}
+.quick-nav-bar ul {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.quick-nav-bar li {
+  margin: 0;
+  padding: 0;
+}
+.quick-nav-bar a {
+  display: flex;
+  align-items: center;
+  gap: 0.38em;
+  height: 2.1em;
+  padding: 0.29em 1.1em 0.29em 0.99em;
+  border-radius: 7px;
+  font-size: 1.01rem;
+  font-weight: 600;
+  color: var(--primary-purple, #5f2c82);
+  background: linear-gradient(87deg,#f7f7fa 60%,#ece3f8 100%);
+  text-decoration: none;
+  transition: background 0.16s, color 0.13s, box-shadow 0.13s;
+  border: 1.1px solid transparent;
+  box-shadow: 0 1px 5px rgba(95,44,130,0.035);
+}
+.quick-nav-bar a:hover,
+.quick-nav-bar a.active {
+  color: #fff;
+  background: linear-gradient(90deg, var(--primary-orange, #ff7a18) 10%, var(--primary-purple, #5f2c82) 100%);
+  border: 1.1px solid var(--primary-orange, #ff7a18);
+  box-shadow: 0 2px 8px rgba(255,122,24,0.09);
+  text-decoration: none;
+}
+.quick-nav-bar i {
+  font-size: 1.05em;
+  min-width: 1.3em;
+  text-align: center;
+}
+
+
+:root {
+  --primary-orange: #ff7a18;
+  --primary-purple: #5f2c82;
+  --background: #f7f7fa;
+  --card-bg: #fff;
+  --card-shadow: 0 2px 16px rgba(95,44,130,0.11);
+  --border-radius: 18px;
+  --modern-input-bg: #f3f3fa;
+  --modern-input-focus: #ff7a18;
+  --modern-input-shadow: 0 0 0 2px rgba(95,44,130,0.12);
+  --uniform-input-width: 170px;
+  --uniform-input-height: 52px;
+  --uniform-input-font-size: 1.11rem;
+}
+
+body {
+  font-family: 'Segoe UI', 'Arial', 'sans-serif';
+  background: var(--background);
+  margin: 0;
+}
+
+.exp-background {
+  min-height: 100vh;
+  width: 100vw;
+  background: var(--background);
+  overflow-y: auto;
+}
+
+.exp-scroll-center {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2vw 0 2vw 0;
+}
+
+.header {
+  margin-top: 0.5rem;
+  margin-bottom: 2.2rem;
+  font-size: 2.4rem;
+  font-weight: 900;
+  background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1.2px;
+  text-align: center;
+}
+
+.expenditure-form {
+  width: 100%;
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  border-radius: var(--border-radius);
+  padding: 2.3rem 1.8rem 2rem 1.8rem;
+  margin-bottom: 2.3rem;
+}
+
+.input-row-date-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: left;
+  gap: 14px;
+  margin-bottom: 1.25rem;
+  background: var(--card-bg);
+  box-shadow: 0 2px 10px rgba(95,44,130,0.08);
+  border-radius: 14px;
+  padding: 1rem 1.3rem;
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.input-row-date-card label {
+  font-size: 1.09rem;
+  font-weight: 600;
+  color: #57576c;
+  margin-bottom: 0;
+  min-width: 60px;
+}
+
+.input-date-box {
+  background: var(--modern-input-bg);
+  border: none;
+  border-radius: 10px;
+  box-shadow: var(--modern-input-shadow);
+  font-size: var(--uniform-input-font-size);
+  padding: 0 1.12rem;
+  color: #323264;
+  outline: none;
+  width: 170px;
+  min-width: 0;
+  max-width: 100%;
+  height: var(--uniform-input-height);
+  display: flex;
+  align-items: center;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.input-date-box:focus {
+  border: 1.8px solid var(--modern-input-focus);
+  box-shadow: 0 0 0 3px rgba(255,122,24,0.15);
+  background: #fffdfa;
+}
+
+.other-fields-section {
+  margin-bottom: 1.2rem;
+}
+
+.other-input-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 1.18rem;
+  margin-top: 0.4rem;
+  background: #fff;
+  border-radius: 17px;
+  box-shadow: 0 2px 18px rgba(95,44,130,0.11);
+  padding: 1.2rem 1rem 1.2rem 1rem;
+}
+
+.uniform-input {
+  background: var(--modern-input-bg);
+  border: none;
+  border-radius: 10px;
+  box-shadow: var(--modern-input-shadow);
+  font-size: var(--uniform-input-font-size);
+  padding: 0 1.12rem;
+  color: #323264;
+  outline: none;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  height: var(--uniform-input-height);
+  display: flex;
+  align-items: center;
+  transition: box-shadow 0.2s, border-color 0.2s, background 0.2s;
+  box-sizing: border-box;
+}
+
+.uniform-input:focus {
+  border: 1.8px solid var(--modern-input-focus);
+  box-shadow: 0 0 0 3px rgba(255,122,24,0.15);
+  background: #fffdfa;
+}
+
+.remove-other-btn {
+  background: none;
+  border: none;
+  color: var(--primary-orange);
+  font-size: 2.1rem;
+  cursor: pointer;
+  align-self: center;
+  transition: color 0.14s;
+  height: var(--uniform-input-height);
+  margin-left: 2px;
+  margin-right: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.remove-other-btn:hover {
+  color: var(--primary-purple);
+}
+
+.row-error .uniform-input,
+.row-error .input-date-box {
+  border: 2px solid #d23535 !important;
+}
+
+.custom-type-area {
+  margin: 1rem 0 0.9rem 0;
+  padding: 0.75rem 1.15rem;
+  border-radius: 12px;
+  background: #ececf4;
+  box-shadow: 0 2px 6px rgba(95,44,130,0.09);
+  border: 1px solid #e0d6f0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.custom-type-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #665;
+  margin-bottom: 0.17rem;
+}
+
+input[type="text"].custom-type-box {
+  width: 100%;
+  padding: 0.85rem 1.2rem;
+  font-size: 1.11rem;
+  border-radius: 9px;
+  border: 1.6px solid var(--primary-purple);
+  outline: none;
+  background: var(--card-bg);
+  color: #333;
+  transition: border-color 0.18s;
+  margin-bottom: 0.45rem;
+  box-sizing: border-box;
+}
+
+input[type="text"].custom-type-box:focus {
+  border: 2px solid var(--primary-orange);
+  background: #fffdfa;
+}
+
+.submit-btn, .add-other-btn, .download-btn, .above-duration-btn {
+  width: 100%;
+  padding: 1.15rem 0;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-purple) 100%);
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 1.3rem;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(255,122,24,0.13);
+  transition: background 0.18s, opacity 0.13s;
+}
+
+.submit-btn:hover, .add-other-btn:hover {
+  opacity: 0.98;
+  background: linear-gradient(90deg, var(--primary-purple) 0%, var(--primary-orange) 100%);
+}
+
+.download-card {
+  padding: 1rem 1.15rem !important;
+}
+
+.vector-bg {
+  background-color: #fff;
+  background-image: url('data:image/svg+xml;utf8,<svg width="340" height="150" viewBox="0 0 340 150" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse opacity="0.26" cx="200" cy="125" rx="140" ry="50" fill="%2335c2b7"/><ellipse opacity="0.08" cx="100" cy="15" rx="110" ry="32" fill="%23ff7a18"/><ellipse opacity="0.11" cx="275" cy="60" rx="50" ry="18" fill="%235f2c82"/></svg>');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  margin-bottom: 2.3rem;
+}
+
+.download-btn {
+  font-size: 1.1rem;
+  margin-top: 0 !important;
+  background: linear-gradient(90deg,#21d17c 0%,#11998e 100%) !important;
+}
+
+.above-duration-btn {
+  width: auto;
+  min-width: 190px;
+  padding: 1rem 1.7rem !important;
+  white-space: nowrap;
+  text-align: center;
+  display: inline-block;
+}
+
+.computed-amount-preview {
+  margin-top: 1.25rem;
+  margin-bottom: 1.3rem;
+  font-size: 1.22rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f7f7fa;
+  padding: 0.8rem 1.3rem;
+  border-radius: 12px;
+  border: 1px solid #ececed;
+}
+
+.download-btn:hover, .above-duration-btn:hover {
+  opacity: 0.97;
+  background: linear-gradient(90deg, #11998e 0%, #21d17c 100%) !important;
+}
+@media (max-width: 850px){
+  .exp-scroll-center {max-width:98vw;}
+  .expenditure-form {padding: 1.2rem 0.3rem;}
+  .header {font-size: 1.4rem;}
+  .other-input-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding:0.8rem 0.2rem;
+  }
+  .input-row-date-card {max-width:98vw;}
+}
+  </style>
+</head>
+<body>
+
+<!-- Quick Navigation Bar (remains at top of Income page) -->
+<nav class="quick-nav-bar">
+  <ul>
+    <li><a href="#" onclick="goto('expenditure');return false;"><i class="fas fa-arrow-up"></i> Expenditure</a></li>
+    <li><a href="#" onclick="goto('income');return false;"><i class="fas fa-arrow-down"></i> Income</a></li>
+    <li><a href="#" onclick="goto('expenditure-evaluation');return false;"><i class="fas fa-chart-bar"></i> Expenditure Evaluation</a></li>
+    <li><a href="#" onclick="goto('income-evaluation');return false;"><i class="fas fa-chart-line"></i> Income Evaluation</a></li>
+    <li><a href="#" onclick="goto('control-budget');return false;"><i class="fas fa-sliders-h"></i> Control Budget</a></li>
+    <li><a href="#" onclick="goto('analysis');return false;"><i class="fas fa-magnifying-glass-chart"></i> Analysis</a></li>
+  </ul>
+</nav>
+
+  
+<div class="exp-background">
+  <div class="exp-scroll-center">
+    <div class="header">Expenditure Form</div>
+    <form class="expenditure-form" id="expenditureForm" autocomplete="off">
+      <div class="input-row-date-card">
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" class="input-date-box" required>
+      </div>
+      <div class="other-fields-section" id="default-item-fields"></div>
+      <div class="other-fields-section" id="item-fields"></div>
+      <button type="button" class="add-other-btn" id="add-other-btn">+ Add Item Field</button>
+      <div class="custom-type-area">
+        <div class="custom-type-label">
+          If your Type does not appear above, enter here to add a selection type:
+        </div>
+        <input type="text" id="customTypeInputAll" class="custom-type-box" placeholder="Add another select type" />
+        <button type="button" class="add-other-btn" id="add-custom-type-btn" style="margin-top:0.3rem;">Add Custom Type to Drop-downs</button>
+      </div>
+      <div class="computed-amount-preview">
+        <span><strong>Total Amount:</strong></span>
+        <span id="computedAmount" style="font-weight:bold; color:#5f2c82;">0.00</span>
+      </div>
+      <input type="hidden" id="amount" name="amount">
+      <button class="submit-btn" type="submit">Submit Expenditure</button>
+      <div id="response" style="margin-top:14px;min-height:22px;"></div>
+    </form>
+    <div class="expenditure-form download-card vector-bg">
+      <button class="submit-btn download-btn" type="button" id="download-excel-btn">Download Updated Expenditure Totals</button>
+      <div style="margin-top:1.1rem; display: flex; flex-direction: column; gap: 0.7rem;">
+        <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap; justify-content:center;">
+          <label for="download-start-date" style="font-size:1.05rem;">Start Date:</label>
+          <input type="date" id="download-start-date" style="font-size:1.1rem; padding:0.51rem 1.1rem; border-radius:9px; border:1.3px solid #bbb;" />
+          <label for="download-end-date" style="font-size:1.05rem;">End Date:</label>
+          <input type="date" id="download-end-date" style="font-size:1.1rem; padding:0.51rem 1.1rem; border-radius:9px; border:1.3px solid #bbb;" />
+        </div>
+        <div style="display: flex; justify-content: center;">
+          <button class="submit-btn download-btn above-duration-btn" type="button" id="download-duration-btn">Download for above duration</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const categories = [
+    "Prayer Ministry","Ushering","Annual general Meeting(AGM)","Associates","Anza Fyt",
+    "Fyt 2nd Years","Fyt 3rd Years","Vuka Fyt","Bible Study and Discipleship","Creative Art and Design",
+    "Music Department","Ladies and Gents","Adhoc and Social Weekend","Mission","Media Department",
+    "Secretary and Chairperson","Treasury","Focus","Savings"
+  ];
+
+  let types = [
+    "TELEPHONE", "PRINTING", "MEALS", "APPRECIATION", "TRANSPORT", "REFRESHMENTS",
+    "MUSIC", "PRAYER", "MISSION", "CREATIVE", "USHERING", "ICT DOCKET", "DISCIPLESHIP",
+    "STATIONERY", "WELFARE", "FOCUS STEM", "FOCUS TITHE", "TRANSACTION COST", "SUPPORT"
+  ];
+
+  const DEFAULT_FIELDS = 10;
+  let additionalCount = 0;
+
+  function populateDropdowns(scope=document) {
+    scope.querySelectorAll('.item-category').forEach(sel => {
+      sel.className = 'item-category uniform-input';
+      sel.innerHTML = `<option value="">Select category</option>` +
+        categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+    });
+    scope.querySelectorAll('.item-type').forEach(sel => {
+      sel.className = 'item-type uniform-input';
+      sel.innerHTML = `<option value="">Select type</option>` +
+        types.map(type => `<option value="${type}">${type}</option>`).join('');
+    });
+  }
+
+  function makeItemFieldHtml(idx,isDefault) {
+    return `<div class="other-input-row" id="${isDefault ? "defaultField"+idx : "addField"+idx}">
+    <input type="text" placeholder="Item Title" class="item-title uniform-input" autocomplete="off" />
+    <input type="number" placeholder="Amount" class="item-amount uniform-input" step="any" min="0" />
+    <select class="item-category uniform-input"></select>
+    <select class="item-type uniform-input"></select>
+    ${!isDefault ? 
+      `<button class="remove-other-btn" type="button" onclick="this.parentElement.remove(); updateAmountSum();" title="Remove this item">&times;</button>`
+      : ""
+    }
+    </div>`;
+  }
+
+  function initializeDefaultFields() {
+    let container = document.getElementById('default-item-fields');
+    container.innerHTML = "";
+    for (let i=0;i<DEFAULT_FIELDS;i++) {
+      container.insertAdjacentHTML('beforeend', makeItemFieldHtml(i+1,true));
+    }
+    populateDropdowns(container);
+    container.querySelectorAll('.item-amount').forEach(inp => {
+      inp.addEventListener('input', updateAmountSum);
+    });
+  }
+
+  function addItemField() {
+    additionalCount++;
+    let id = "addField"+additionalCount;
+    let newDiv = document.createElement("div");
+    newDiv.className = "other-input-row";
+    newDiv.id = id;
+    newDiv.innerHTML =
+      `<input type="text" placeholder="Item Title" class="item-title uniform-input" autocomplete="off" />
+       <input type="number" placeholder="Amount" class="item-amount uniform-input" step="any" min="0" />
+       <select class="item-category uniform-input"></select>
+       <select class="item-type uniform-input"></select>
+       <button class="remove-other-btn" type="button" onclick="this.parentElement.remove(); updateAmountSum();" title="Remove this item">&times;</button>`;
+    document.getElementById('item-fields').appendChild(newDiv);
+    populateDropdowns(newDiv);
+    newDiv.querySelector('.item-amount').addEventListener('input', updateAmountSum);
+    updateAmountSum();
+  }
+
+  document.getElementById('add-other-btn').addEventListener('click', addItemField);
+
+  if (document.readyState === "loading") {
+    document.addEventListener('DOMContentLoaded', initializeDefaultFields);
+  } else {
+    initializeDefaultFields();
+  }
+
+  document.getElementById('add-custom-type-btn').addEventListener('click', function() {
+  let inputAll = document.getElementById('customTypeInputAll');
+  let val = inputAll.value.trim();
+  if (val && !types.includes(val)) {
+    types.push(val);
+    // Only repopulate the type dropdowns and preserve their value!
+    document.querySelectorAll('.item-type').forEach(sel => {
+      let current = sel.value;
+      sel.innerHTML = `<option value="">Select type</option>` +
+        types.map(type => `<option value="${type}">${type}</option>`).join('');
+      sel.value = current; // Restore the user's choice!
+    });
+    inputAll.value = '';
+  }
+});
+
+  function updateAmountSum() {
+    let sum = 0;
+    document.querySelectorAll('.item-amount').forEach(inp => {
+      let val = Number(inp.value || 0);
+      sum += isNaN(val) ? 0 : val;
+    });
+    document.getElementById('computedAmount').textContent = sum.toFixed(2);
+    document.getElementById('amount').value = sum.toFixed(2);
+  }
+  document.addEventListener('input', updateAmountSum);
+
+  document.getElementById('expenditureForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const dateVal = document.getElementById('date').value;
+    if(!dateVal){
+      document.getElementById('response').textContent = "Date is required!";
+      document.getElementById('response').style.color = "#d23535";
+      document.getElementById('date').classList.add('row-error');
+      return;
+    } else {
+      document.getElementById('date').classList.remove('row-error');
+    }
+
+    let valid = true;
+    let incompletePairs = [];
+    document.querySelectorAll('.other-input-row').forEach((row, idx) => {
+      // Grab all values
+      const title = row.querySelector('.item-title').value.trim();
+      const amount = row.querySelector('.item-amount').value;
+      const category = row.querySelector('.item-category').value;
+      const type = row.querySelector('.item-type').value;
+      // If any field is non-empty, ALL must be filled & amount > 0
+      const notEmpty = title || amount || category || type;
+      if(notEmpty){
+        if(!(title && amount && category && type && parseFloat(amount) > 0)){
+          valid = false;
+          incompletePairs.push(idx+1);
+          row.classList.add('row-error');
+          Array.from(row.children).forEach(child => child.classList.add('row-error'));
+        }else{
+          row.classList.remove('row-error');
+          Array.from(row.children).forEach(child => child.classList.remove('row-error'));
+        }
+      }else{
+        row.classList.remove('row-error');
+        Array.from(row.children).forEach(child => child.classList.remove('row-error'));
+      }
+    });
+    if (!valid) {
+      document.getElementById('response').textContent =
+        "Every item must have TITLE, AMOUNT (>0), CATEGORY, and TYPE chosen.\n" +
+        "Incomplete item(s): " + incompletePairs.join(", ");
+      document.getElementById('response').style.color = "#d23535";
+      return;
+    }
+
+    const data = {};
+    data["date"] = dateVal;
+    data["amount"] = document.getElementById('amount').value;
+
+    let itemsArr = [];
+    document.querySelectorAll('.other-input-row').forEach(row => {
+      let title = row.querySelector('.item-title').value.trim();
+      let value = Number(row.querySelector('.item-amount').value || 0);
+      let category = row.querySelector('.item-category').value || '';
+      let type = row.querySelector('.item-type').value || '';
+      // Only push complete pairs
+      if (title && value > 0 && category && type) {
+        itemsArr.push({title: title, value: value, category: category, type: type});
+      }
+    });
+    if (itemsArr.length > 0) {
+      data.otherDetails = JSON.stringify(itemsArr);
+    }
+
+    document.getElementById('response').textContent = "Submitting...";
+    document.getElementById('response').style.color = "";
+    google.script.run.withSuccessHandler(function(resp) {
+    document.getElementById('response').textContent = resp.message;
+    document.getElementById('response').style.color = "#079f50";
+    document.getElementById('expenditureForm').reset();
+    document.getElementById('default-item-fields').innerHTML = "";
+    document.getElementById('item-fields').innerHTML = "";
+    document.getElementById('computedAmount').textContent = "0.00";
+    additionalCount = 0;
+    initializeDefaultFields();
+    populateDropdowns();
+
+    // --- ADD THIS BLOCK FOR EXPENDITURE TOTALS ---
+    google.script.run.withSuccessHandler(function(respTotals) {
+      // Optionally notify user here, or leave empty
+      // Example: document.getElementById('response').textContent += "\n" + respTotals.message;
+    }).withFailureHandler(function(errTotals) {
+      // Optionally handle error, or leave empty
+      // Example: document.getElementById('response').textContent += "\nError updating totals! ";
+    }).submitExpenditureTotals(data);
+    // ---------------------------------------------
+
+  }).withFailureHandler(function(error) {
+    document.getElementById('response').textContent = "Submission error: " + error.message;
+    document.getElementById('response').style.color = "#d23535";
+  }).submitExpenditureForm(data);
+  });
+
+  document.getElementById('download-excel-btn').addEventListener('click', function() {
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Preparing Excel...';
+    google.script.run.withSuccessHandler(function(url) {
+      btn.disabled = false;
+      btn.textContent = 'Download Tab as Excel';
+      window.open(url, '_blank');
+    }).withFailureHandler(function(err) {
+      btn.disabled = false;
+      btn.textContent = 'Download Tab as Excel';
+      alert('Could not generate Excel: ' + (err && err.message ? err.message : err));
+    }).downloadExpenditureExcel();
+  });
+
+  document.getElementById('download-duration-btn').addEventListener('click', function() {
+    var btn = this;
+    var start = document.getElementById('download-start-date').value;
+    var end = document.getElementById('download-end-date').value;
+    if (!start || !end) {
+      btn.textContent = 'Choose Both Dates!';
+      setTimeout(() => { btn.textContent = 'Download for above duration'; }, 1500);
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Preparing...';
+    google.script.run.withSuccessHandler(function(url) {
+      btn.disabled = false;
+      btn.textContent = 'Download for above duration';
+      window.open(url, '_blank');
+    }).withFailureHandler(function(err) {
+      btn.disabled = false;
+      btn.textContent = 'Download for above duration';
+      alert('Could not generate Excel: ' + (err && err.message ? err.message : err));
+    }).downloadExpenditureExcelForDuration(start, end);
+  });
+
+})();
+</script>
+</body>
+</html>

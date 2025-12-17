@@ -1,0 +1,219 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<div class="categories-wrapper">
+  <div>
+    <div class="header">Please Select a Category</div>
+    <div class="categories-list">
+      <div class="category-card" onclick="goto('expenditure')">
+        <div class="category-icon"><i class="fas fa-arrow-up"></i></div>
+        <div class="category-name">Expenditure</div>
+      </div>
+      <div class="category-card" onclick="goto('income')">
+        <div class="category-icon"><i class="fas fa-arrow-down"></i></div>
+        <div class="category-name">Income</div>
+      </div>
+      <div class="category-card" onclick="goto('expenditure-evaluation')">
+        <div class="category-icon"><i class="fas fa-chart-bar"></i></div>
+        <div class="category-name">Expenditure Evaluation</div>
+      </div>
+      <div class="category-card" onclick="goto('income-evaluation')">
+        <div class="category-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="category-name">Income Evaluation</div>
+      </div>
+      <div class="category-card" onclick="goto('control-budget')">
+        <div class="category-icon"><i class="fas fa-sliders-h"></i></div>
+        <div class="category-name">Control Budget</div>
+      </div>
+      <!-- Added Analysis category below -->
+      <div class="category-card" onclick="goto('analysis')">
+        <div class="category-icon"><i class="fas fa-magnifying-glass-chart"></i></div>
+        <div class="category-name">Analysis</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- The main app content will be loaded here -->
+<div id="app"></div>
+<style>
+  :root {
+    --primary-orange: #ff7a18;
+    --primary-purple: #5f2c82;
+    --background: #f7f7fa;
+    --card-bg: #fff;
+    --card-shadow: 0 2px 16px rgba(95,44,130,0.11);
+    --border-radius: 18px;
+  }
+  .categories-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    background: var(--background);
+  }
+  .header {
+    margin-top: 0;
+    margin-bottom: 2.2rem;
+    font-size: 2.1rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1.5px;
+    text-align: center;
+  }
+  .categories-list {
+    width: 95%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+  }
+  .category-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    padding: 1.3rem 1.1rem 1.1rem 1.1rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: box-shadow 0.19s, transform 0.17s;
+    border: 2px solid #fff;
+    position: relative;
+    min-height: 70px;
+  }
+  .category-card:hover {
+    box-shadow: 0 6px 24px rgba(95,44,130,0.19);
+    border: 2px solid var(--primary-orange);
+    transform: translateY(-2px) scale(1.015);
+    z-index: 2;
+  }
+  .category-icon {
+    font-size: 2rem;
+    margin-right: 1.06rem;
+    background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-purple) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .category-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary-purple);
+    text-align: left;
+    letter-spacing: 1px;
+  }
+  @media (max-width: 530px) {
+    .header {
+      font-size: 1.3rem;
+      margin-top: 0.5rem;
+    }
+    .categories-list {
+      max-width: 100%;
+    }
+    .category-card {
+      padding: 1.1rem 0.7rem;
+    }
+  }
+</style>
+<script>
+function goto(category) {
+  if (category === 'expenditure') {
+    google.script.run.withSuccessHandler(function(html) {
+      document.getElementById('app').innerHTML = html;
+      var scripts = document.getElementById('app').querySelectorAll('script');
+      scripts.forEach(function(script) {
+        var s = document.createElement('script');
+        if (script.src) {
+          s.src = script.src;
+        } else {
+          s.textContent = script.textContent;
+        }
+        document.body.appendChild(s);
+        document.body.removeChild(s);
+      });
+    }).getExpenditurePage();
+  } else if (category === 'income') {
+    google.script.run.withSuccessHandler(function(html) {
+      document.getElementById('app').innerHTML = html;
+      var scripts = document.getElementById('app').querySelectorAll('script');
+      scripts.forEach(function(script) {
+        var s = document.createElement('script');
+        if (script.src) {
+          s.src = script.src;
+        } else {
+          s.textContent = script.textContent;
+        }
+        document.body.appendChild(s);
+        document.body.removeChild(s);
+      });
+    }).getIncomePage();
+  } else if (category === 'income-evaluation') {
+    google.script.run.withSuccessHandler(function(html) {
+      document.getElementById('app').innerHTML = html;
+      var scripts = document.getElementById('app').querySelectorAll('script');
+      scripts.forEach(function(script) {
+        var s = document.createElement('script');
+        if (script.src) {
+          s.src = script.src;
+        } else {
+          s.textContent = script.textContent;
+        }
+        document.body.appendChild(s);
+        document.body.removeChild(s);
+      });
+    }).getIncomeEvalPage();
+  } else if (category === 'expenditure-evaluation') {
+    google.script.run.withSuccessHandler(function(html) {
+      document.getElementById('app').innerHTML = html;
+      var scripts = document.getElementById('app').querySelectorAll('script');
+      scripts.forEach(function(script) {
+        var s = document.createElement('script');
+        if (script.src) {
+          s.src = script.src;
+        } else {
+          s.textContent = script.textContent;
+        }
+        document.body.appendChild(s);
+        document.body.removeChild(s);
+      });
+    }).getExpenditureEvalPage();
+  } else if (category === 'control-budget') {
+    google.script.run.withSuccessHandler(function(html) {
+      document.getElementById('app').innerHTML = html;
+      var scripts = document.getElementById('app').querySelectorAll('script');
+      scripts.forEach(function(script) {
+        var s = document.createElement('script');
+        if (script.src) {
+          s.src = script.src;
+        } else {
+          s.textContent = script.textContent;
+        }
+        document.body.appendChild(s);
+        document.body.removeChild(s);
+      });
+    }).getControlBudgetPage();
+  } else if (category === 'analysis') {
+    google.script.run.withSuccessHandler(function(html) {
+      document.getElementById('app').innerHTML = html;
+      var scripts = document.getElementById('app').querySelectorAll('script');
+      scripts.forEach(function(script) {
+        var s = document.createElement('script');
+        if (script.src) {
+          s.src = script.src;
+        } else {
+          s.textContent = script.textContent;
+        }
+        document.body.appendChild(s);
+        document.body.removeChild(s);
+      });
+      // CALL the analysis initializer to avoid blank state
+      if (typeof window.initAnalysis === 'function') window.initAnalysis();
+    }).getAnalysisPage();
+  } else {
+    alert("Navigate to: " + category);
+  }
+}
+</script>

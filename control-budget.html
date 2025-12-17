@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Control Budget</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+
+/* Quick Navigation Bar */
+.quick-nav-bar {
+  background: #fff;
+  box-shadow: 0 1px 12px rgba(95,44,130,0.06), 0 0.5px 0 #ececed;
+  border-radius: 0 0 18px 18px;
+  padding: 0.5rem 0.7rem 0.45rem 0.7rem;
+  margin-bottom: 1.12rem;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  width: 100vw;
+  min-width: 300px;
+  overflow-x: auto;
+}
+.quick-nav-bar ul {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.quick-nav-bar li {
+  margin: 0;
+  padding: 0;
+}
+.quick-nav-bar a {
+  display: flex;
+  align-items: center;
+  gap: 0.38em;
+  height: 2.1em;
+  padding: 0.29em 1.1em 0.29em 0.99em;
+  border-radius: 7px;
+  font-size: 1.01rem;
+  font-weight: 600;
+  color: var(--primary-purple, #5f2c82);
+  background: linear-gradient(87deg,#f7f7fa 60%,#ece3f8 100%);
+  text-decoration: none;
+  transition: background 0.16s, color 0.13s, box-shadow 0.13s;
+  border: 1.1px solid transparent;
+  box-shadow: 0 1px 5px rgba(95,44,130,0.035);
+}
+.quick-nav-bar a:hover,
+.quick-nav-bar a.active {
+  color: #fff;
+  background: linear-gradient(90deg, var(--primary-orange, #ff7a18) 10%, var(--primary-purple, #5f2c82) 100%);
+  border: 1.1px solid var(--primary-orange, #ff7a18);
+  box-shadow: 0 2px 8px rgba(255,122,24,0.09);
+  text-decoration: none;
+}
+.quick-nav-bar i {
+  font-size: 1.05em;
+  min-width: 1.3em;
+  text-align: center;
+}
+
+
+    :root {
+      --primary-orange: #ff7a18;
+      --primary-purple: #5f2c82;
+      --background: #f7f7fa;
+      --card-bg: #fff;
+      --card-shadow: 0 2px 16px rgba(95,44,130,0.11);
+      --border-radius: 18px;
+      --primary-green: #21d17c;
+      --primary-green-dark: #11998e;
+    }
+    .budget-background {
+      min-height: 100vh;
+      width: 100vw;
+      background: var(--background);
+      overflow-y: auto;
+    }
+    .budget-scroll-center {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2vw 0 2vw 0;
+    }
+    .control-header {
+      margin-top: 2.5rem;
+      margin-bottom: 2.2rem;
+      font-size: 2.4rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      text-align: center;
+      line-height: 1.14;
+    }
+    .budget-form-card {
+      width: 100%;
+      background: var(--card-bg);
+      box-shadow: var(--card-shadow);
+      border-radius: var(--border-radius);
+      padding: 2.1rem 2rem 2.1rem 2rem;
+      margin-bottom: 2.3rem;
+    }
+    .stretch-row {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1.5rem;
+    }
+    .stretch-label {
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.16rem;
+      margin-bottom: 0.65rem;
+      margin-top: 0.2rem;
+      color: var(--primary-purple);
+    }
+    .stretch-input {
+      width: 100%;
+      max-width: 100%;
+      min-width: 60%;
+      padding: 0.82rem 0.9rem;
+      font-size: 1.08rem;
+      border: 1.5px solid var(--primary-purple);
+      border-radius: 7px;
+      background: var(--card-bg);
+      color: var(--text-color, #333);
+      box-sizing: border-box;
+      text-align: center;
+      transition: border-color 0.18s;
+    }
+    .stretch-input:focus {
+      border: 1.5px solid var(--primary-orange);
+    }
+    .category-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 1.08rem;
+    }
+    .category-row label {
+      flex: 3 3 190px;
+      font-size: 1.03rem;
+      text-align: left;
+      color: var(--primary-purple);
+      padding-right:6px;
+    }
+    .category-row input[type="number"] {
+      flex: 1 1 110px;
+      padding: 0.72rem 0.8rem;
+      font-size: 1.02rem;
+      border: 1.5px solid var(--primary-purple);
+      border-radius: 7px;
+      background: var(--card-bg);
+      color: #111;
+      box-sizing: border-box;
+      min-width: 100px;
+      max-width: 280px;
+      text-align: center;
+      transition: border-color 0.18s;
+    }
+    .category-row input[type="number"]:focus {
+      border: 1.5px solid var(--primary-orange);
+    }
+    .duration-block {
+      margin-top: 2.2rem;
+      margin-bottom: 2.9rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .duration-title {
+      font-size: 1.13rem;
+      color: var(--primary-purple);
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 1.1rem;
+    }
+    .inline-dates {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+    }
+    .inline-dates label {
+      font-size: 0.98rem;
+      font-weight: 550;
+      color: #111;
+    }
+    .inline-dates input[type="date"] {
+      padding: 0.53rem 0.9rem;
+      border-radius: 7px;
+      border: 1.5px solid var(--primary-purple);
+      font-size: 1.04rem;
+      text-align: center;
+      background: var(--card-bg);
+      color: #111;
+      min-width: 128px;
+    }
+    .btn-row,
+    .extra-btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 1.2rem;
+    }
+    .submit-btn, .extra-btn {
+      width: 100%;
+      padding: 0.92rem 0;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-purple) 100%);
+      color: #fff;
+      font-size: 1.12rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 9px rgba(95,44,130,0.10);
+      transition: background 0.17s, opacity 0.12s;
+      margin-bottom: 10px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .submit-btn:hover, .extra-btn:hover {
+      opacity: 0.94;
+      background: linear-gradient(90deg, var(--primary-purple) 0%, var(--primary-orange) 100%);
+    }
+    #fetch-current-btn {
+      background: linear-gradient(90deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
+    }
+    #fetch-current-btn:hover {
+      background: linear-gradient(90deg, var(--primary-green-dark) 0%, var(--primary-green) 100%);
+    }
+    @media (max-width: 650px) {
+      .budget-scroll-center {
+        max-width: 99vw;
+        padding-left: 0.2rem;
+        padding-right: 0.2rem;
+      }
+      .budget-form-card { padding: 1.12rem 0.46rem 1.12rem 0.46rem;}
+      .control-header { font-size: 1.32rem; margin-top: 1.3rem;}
+      .inline-dates { flex-direction: column; gap: 10px;}
+      .submit-btn, .extra-btn { padding: 0.92rem 0;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Quick Navigation Bar (remains at top of Income page) -->
+<nav class="quick-nav-bar">
+  <ul>
+    <li><a href="#" onclick="goto('expenditure');return false;"><i class="fas fa-arrow-up"></i> Expenditure</a></li>
+    <li><a href="#" onclick="goto('income');return false;"><i class="fas fa-arrow-down"></i> Income</a></li>
+    <li><a href="#" onclick="goto('expenditure-evaluation');return false;"><i class="fas fa-chart-bar"></i> Expenditure Evaluation</a></li>
+    <li><a href="#" onclick="goto('income-evaluation');return false;"><i class="fas fa-chart-line"></i> Income Evaluation</a></li>
+    <li><a href="#" onclick="goto('control-budget');return false;"><i class="fas fa-sliders-h"></i> Control Budget</a></li>
+    <li><a href="#" onclick="goto('analysis');return false;"><i class="fas fa-magnifying-glass-chart"></i> Analysis</a></li>
+  </ul>
+</nav>
+
+
+<div class="budget-background">
+  <div class="budget-scroll-center">
+    <div class="control-header">Control Budget</div>
+    <form class="budget-form-card" id="controlBudgetForm" autocomplete="off">
+      <div class="stretch-row">
+        <label for="main_target" class="stretch-label">Total Christian Union Expenditure Target</label>
+        <input type="number" id="main_target" name="main_target" class="stretch-input" min="0" step="any" required placeholder="Enter CU Expenditure Target">
+      </div>
+      <div style="margin:2.0rem 0 1rem 0; font-weight: bold; font-size:1.13rem; color:#5f2c82; text-align:center">
+        Targets for Various Departments
+      </div>
+      <div id="categories-section">Department fields failed to load. Please refresh.</div>
+      <div class="duration-block">
+        <div class="duration-title">Specify Target Duration</div>
+        <div class="inline-dates">
+          <label for="start_date">Start Date:</label>
+          <input type="date" id="start_date" name="start_date" style="text-align:center;" required>
+          <label for="end_date">End Date:</label>
+          <input type="date" id="end_date" name="end_date" style="text-align:center;" required>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="submit-btn" type="submit">Save Budget Targets</button>
+      </div>
+      <div class="extra-btn-row">
+        <button class="extra-btn" type="button" id="fetch-current-btn">Load Current Target</button>
+      </div>
+      <div id="response" style="margin-top:16px;min-height:22px;text-align:center;"></div>
+      <div id="current-targets-result" style="margin-top:12px;min-height:22px;text-align:center;"></div>
+    </form>
+  </div>
+</div>
+<script>
+  // This list MUST match the sheet headers (excluding Start/End/Main Target header)
+  const departments = [
+    "Prayer Ministry","Ushering","Annual general Meeting(AGM)","Associates","Anza Fyt",
+    "Fyt 2nd Years","Fyt 3rd Years","Vuka Fyt","Bible Study and Discipleship","Creative Art and Design",
+    "Music Department","Ladies and Gents","Adhoc and Social Weekend","Mission","Media Department",
+    "Secretary and Chairperson","Treasury","Focus","Savings"
+  ];
+
+  // Render department number inputs with correct IDs for population
+  function renderCategoryInputs() {
+    let section = document.getElementById('categories-section');
+    if (!section) return;
+    section.innerHTML = '';
+    departments.forEach(dept => {
+      let key = "cat_" + dept.replace(/\s+/g,'_').replace(/[()]/g,'');
+      let div = document.createElement('div');
+      div.className = "category-row";
+      div.innerHTML =
+        `<label for="${key}">${dept}</label>
+        <input type="number" id="${key}" name="${key}" min="1" step="any" required placeholder="Target for ${dept}" style="text-align:center">`;
+      section.appendChild(div);
+    });
+  }
+  renderCategoryInputs();
+
+  function populateAllFields(obj) {
+    try {
+      if(obj.start_date !== undefined) document.getElementById('start_date').value = obj.start_date;
+      if(obj.end_date !== undefined) document.getElementById('end_date').value = obj.end_date;
+      if(obj.main_target !== undefined) document.getElementById('main_target').value = obj.main_target;
+      departments.forEach(dept => {
+        var key = "cat_" + dept.replace(/\s+/g,'_').replace(/[()]/g,'');
+        if(obj[key] !== undefined && document.getElementById(key))
+          document.getElementById(key).value = obj[key];
+      });
+    } catch (e) {
+      console.error("Problem populating fields:", e);
+    }
+  }
+
+  document.getElementById('controlBudgetForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {};
+    let problemFields = [];
+    const mainTarget = document.getElementById('main_target');
+    if (!mainTarget.value) problemFields.push('Main target');
+    data.main_target = mainTarget.value || "";
+    const startDate = document.getElementById('start_date');
+    const endDate = document.getElementById('end_date');
+    if (!startDate.value) problemFields.push('Start Date');
+    if (!endDate.value) problemFields.push('End Date');
+    data.start_date = startDate.value || "";
+    data.end_date = endDate.value || "";
+    departments.forEach(dept => {
+      const key = "cat_" + dept.replace(/\s+/g,'_').replace(/[()]/g,'');
+      const inp = document.getElementById(key);
+      if (!inp || !inp.value) problemFields.push(dept);
+      data[key] = inp ? inp.value : "";
+    });
+    if (problemFields.length > 0) {
+      document.getElementById('response').textContent =
+        "Please fill in all fields! Missing: " + problemFields.join(", ");
+      document.getElementById('response').style.color = "#d23535";
+      return;
+    }
+    document.getElementById('response').textContent = "Submitting...";
+    document.getElementById('response').style.color = "#333";
+    google.script.run.withSuccessHandler(function(resp){
+      document.getElementById('response').textContent = resp.message || "Targets saved!";
+      document.getElementById('response').style.color = "#079f50";
+      document.getElementById('controlBudgetForm').reset();
+      renderCategoryInputs();
+    }).withFailureHandler(function(error){
+      document.getElementById('response').textContent = "Error: " + error.message;
+      document.getElementById('response').style.color = "#d23535";
+    }).submitControlBudgetForm(data);
+  });
+
+  document.getElementById('fetch-current-btn').addEventListener('click', function() {
+    const resultDiv = document.getElementById('current-targets-result');
+    resultDiv.textContent = "Loading current target...";
+    google.script.run.withSuccessHandler(function(result){
+      console.log("Fetch result:", result);
+      if(result.success && result.data) {
+        populateAllFields(result.data);
+        resultDiv.textContent = "Form loaded with current budget targets.";
+      } else {
+        resultDiv.textContent = result.message || "No targets found.";
+      }
+    }).fetchCurrentBudgetTargetsData();
+  });
+</script>
+</body>
+</html>

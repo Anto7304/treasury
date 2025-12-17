@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Analysis - Departmental Expenditure</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+
+
+/* Quick Navigation Bar */
+.quick-nav-bar {
+  background: #fff;
+  box-shadow: 0 1px 12px rgba(95,44,130,0.06), 0 0.5px 0 #ececed;
+  border-radius: 0 0 18px 18px;
+  padding: 0.5rem 0.7rem 0.45rem 0.7rem;
+  margin-bottom: 1.12rem;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  width: 100vw;
+  min-width: 300px;
+  overflow-x: auto;
+}
+.quick-nav-bar ul {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.quick-nav-bar li {
+  margin: 0;
+  padding: 0;
+}
+.quick-nav-bar a {
+  display: flex;
+  align-items: center;
+  gap: 0.38em;
+  height: 2.1em;
+  padding: 0.29em 1.1em 0.29em 0.99em;
+  border-radius: 7px;
+  font-size: 1.01rem;
+  font-weight: 600;
+  color: var(--primary-purple, #5f2c82);
+  background: linear-gradient(87deg,#f7f7fa 60%,#ece3f8 100%);
+  text-decoration: none;
+  transition: background 0.16s, color 0.13s, box-shadow 0.13s;
+  border: 1.1px solid transparent;
+  box-shadow: 0 1px 5px rgba(95,44,130,0.035);
+}
+.quick-nav-bar a:hover,
+.quick-nav-bar a.active {
+  color: #fff;
+  background: linear-gradient(90deg, var(--primary-orange, #ff7a18) 10%, var(--primary-purple, #5f2c82) 100%);
+  border: 1.1px solid var(--primary-orange, #ff7a18);
+  box-shadow: 0 2px 8px rgba(255,122,24,0.09);
+  text-decoration: none;
+}
+.quick-nav-bar i {
+  font-size: 1.05em;
+  min-width: 1.3em;
+  text-align: center;
+}
+
+
+:root {
+  --primary-orange: #ff7a18;
+  --primary-purple: #5f2c82;
+  --primary-blue: #2196f3;
+  --primary-green: #21d17c;
+  --primary-red: #f44336;
+  --background: #f7f7fa;
+  --card-bg: #fff;
+  --card-shadow: 0 2px 16px rgba(95,44,130,0.13);
+  --border-radius: 18px;
+}
+.analysis-container {
+  max-width: 530px;
+  margin: 34px auto 0 auto;
+  padding: 2vw 0 4vw 0;
+  background: var(--background);
+  min-height: 100vh;
+}
+.analysis-header {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--primary-orange) 0%, var(--primary-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2.2rem;
+  text-align: center;
+  letter-spacing: 1.3px;
+}
+.bar-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 2rem 1.5rem 2.4rem 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.bar-label {
+  font-size: 1.19rem;
+  color: var(--primary-purple);
+  font-weight: 700;
+  margin-bottom: 2.3rem;
+}
+.bar-outer {
+  width: 100%;
+  height: 44px;
+  background: #ececed;
+  border-radius: 20px;
+  box-shadow: 0 0 8px rgba(95,44,130,0.05);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.bar-inner {
+  height: 100%;
+  border-radius: 20px;
+  position: absolute;
+  left: 0; top: 0;
+  /* Cap bar visual width at 100%, so percentage label always inside */
+  /* Background color will still change at >100% */
+  max-width: 100%;
+  background: var(--primary-green);
+  transition: width 0.85s cubic-bezier(.6,.01,.4,.99), background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 2px;
+  box-sizing: border-box;
+  overflow: visible;
+  position: absolute;
+  width: 0; /* initial, set by JS */
+}
+.bar-inner .bar-perc {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: max-content;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.12rem;
+  letter-spacing: 2px;
+  padding: 0 4px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.percentage-text {
+  font-size: 1.18rem;
+  font-weight: 700;
+  margin-top: 0.8rem;
+  color: var(--primary-purple);
+  letter-spacing: 2px;
+}
+.statement {
+  font-size: 1.07rem;
+  margin-top: 6px;
+  color: #222;
+  font-weight: 600;
+  letter-spacing: 1.1px;
+}
+a.download-spreadsheet-link {
+  width: 99%;
+  padding: 1.12rem 0;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(90deg, var(--primary-green) 0%, var(--primary-purple) 85%);
+  color: #fff;
+  font-size: 1.13rem;
+  font-weight: 700;
+  box-shadow: 0 3px 14px rgba(21,209,124,0.11);
+  cursor: pointer;
+  margin-top:0.6rem;
+  margin-bottom:0.6rem;
+  text-decoration: none;
+  text-align: center;
+  display: inline-block;
+  transition: background 0.18s, opacity 0.14s;
+}
+a.download-spreadsheet-link:hover {
+  opacity: 0.93;
+  background: linear-gradient(90deg, var(--primary-purple) 0%, var(--primary-green) 85%);
+}
+@media (max-width: 620px) {
+  .analysis-header { font-size: 1.28rem; }
+  .analysis-container { max-width: 99vw; }
+  .bar-card { padding: 1.2rem 0.5rem; }
+  .bar-label { font-size: 1.1rem; }
+  .bar-outer { height: 34px; }
+}
+ 
+  </style>
+</head>
+<body>
+
+<!-- Quick Navigation Bar (remains at top of Income page) -->
+<nav class="quick-nav-bar">
+  <ul>
+    <li><a href="#" onclick="goto('expenditure');return false;"><i class="fas fa-arrow-up"></i> Expenditure</a></li>
+    <li><a href="#" onclick="goto('income');return false;"><i class="fas fa-arrow-down"></i> Income</a></li>
+    <li><a href="#" onclick="goto('expenditure-evaluation');return false;"><i class="fas fa-chart-bar"></i> Expenditure Evaluation</a></li>
+    <li><a href="#" onclick="goto('income-evaluation');return false;"><i class="fas fa-chart-line"></i> Income Evaluation</a></li>
+    <li><a href="#" onclick="goto('control-budget');return false;"><i class="fas fa-sliders-h"></i> Control Budget</a></li>
+    <li><a href="#" onclick="goto('analysis');return false;"><i class="fas fa-magnifying-glass-chart"></i> Analysis</a></li>
+  </ul>
+</nav>
+
+
+  <div class="analysis-container">
+    <div class="analysis-header">Christian Union Departmental Expenditure Analysis</div>
+    <div id="bars"></div>
+    <!-- Download link at the bottom -->
+    <div style="text-align:center; margin-top:2.2rem; margin-bottom:1.3rem;">
+      <a
+        class="download-spreadsheet-link"
+        href="https://docs.google.com/spreadsheets/d/e/2PACX-1vQyca-5STIP8SuckkJ6eT95c6cUgScgYr_QuJFFS3qqhsAqCKdRyPmCQgFgDOo5jFszsVIYYiAnXspX/pub?output=xlsx"
+        target="_blank"
+      >Download Whole Spreadsheet (Excel)</a>
+    </div>
+  </div>
+<script>
+const departments = [
+  "Total Christian Union Expenditure",
+  "Prayer Ministry","Ushering","Annual general Meeting(AGM)","Associates","Anza Fyt",
+  "Fyt 2nd Years","Fyt 3rd Years","Vuka Fyt","Bible Study and Discipleship","Creative Art and Design",
+  "Music Department","Ladies and Gents","Adhoc and Social Weekend","Mission","Media Department",
+  "Secretary and Chairperson","Treasury","Focus","Savings"
+];
+
+function barColor(perc) {
+  if (perc >= 0 && perc <= 20) return "var(--primary-green)";
+  if (perc > 20 && perc <= 40) return "var(--primary-blue)";
+  if (perc > 40 && perc <= 60) return "var(--primary-orange)";
+  if (perc > 60 && perc <= 80) return "var(--primary-purple)";
+  if (perc > 80 && perc <= 100) return "var(--primary-red)";
+  return "var(--primary-red)";
+}
+
+function renderBars(data) {
+  let html = '';
+  departments.forEach(dept => {
+    const deptData = data[dept] || { target: 0, spent: 0, percentage: 0 };
+    let t = deptData.target;
+    let s = deptData.spent;
+    let perc = deptData.percentage;
+    let barVisualWidth = Math.min(Number(perc), 100); // Cap bar at 100% width
+    html += `
+      <div class="bar-card">
+        <div class="bar-label">${dept}</div>
+        <div class="bar-outer">
+          <div class="bar-inner" style="width:${barVisualWidth}%;background:${barColor(perc)};" id="bar-${dept.replace(/[^a-zA-Z0-9]/g,'')}">
+            <span class="bar-perc">${perc}%</span>
+          </div>
+        </div>
+        <div class="percentage-text" id="perc-${dept.replace(/[^a-zA-Z0-9]/g,'')}">${perc}%</div>
+        <div class="statement" id="stmt-${dept.replace(/[^a-zA-Z0-9]/g,'')}">${s} spent of ${t}</div>
+      </div>`;
+  });
+  document.getElementById('bars').innerHTML = html;
+}
+
+window.initAnalysis = function() {
+  fetchAnalysisData();
+};
+
+function processBackendAnalysis(backendData) {
+  let data = {};
+  if (backendData.departments && backendData.departments.length) {
+    departments.forEach(dept => {
+      let obj = backendData.departments.find(d => d.name === dept);
+      data[dept] = obj || { target: 0, spent: 0, percentage: 0 };
+    });
+  }
+  renderBars(data);
+}
+
+function fetchAnalysisData() {
+  if (typeof google !== "undefined" && google.script && google.script.run) {
+    google.script.run.withSuccessHandler(processBackendAnalysis).getDepartmentAnalysisData();
+    renderBars({});
+  } else {
+    renderBars({});
+    document.getElementById('bars').innerHTML +=
+      '<div style="color:#f44336;padding:2rem;text-align:center">Could not load live data.<br>Run this inside a Google Apps Script sidebar or dialog.<br>Check your deployment!</div>';
+  }
+}
+
+// For direct load (sidebar/dialog)
+fetchAnalysisData();
+// No JS needed for .download-spreadsheet-link -- it's just an <a> link
+</script>
+</body>
+</html>
